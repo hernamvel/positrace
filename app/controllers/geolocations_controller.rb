@@ -31,7 +31,7 @@ class GeolocationsController < ApplicationController
     render json: { data: @geolocation }
   end
 
-  # DELETE /geolocations/1
+  # DELETE /geolocations/destroy_by
   def destroy_by
     @geolocation.destroy!
   end
