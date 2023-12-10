@@ -1,0 +1,43 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.ipstack.com/142.30.1.4?access_key=bad_key&hostname=1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/json; Charset=UTF-8
+      Access-Control-Allow-Methods:
+      - GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Blocked-At-Loadbalancer:
+      - '1'
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "success": false,
+          "error": {
+            "code": 101,
+            "type": "invalid_access_key",
+            "info": "You have not supplied a valid API Access Key. [Technical Support: support@apilayer.com]"
+          }
+        }
+  recorded_at: Sun, 10 Dec 2023 09:48:55 GMT
+recorded_with: VCR 6.2.0

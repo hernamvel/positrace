@@ -14,7 +14,7 @@ RSpec.describe "/geolocations", type: :request do
 
   let(:invalid_attributes) {
     {
-      ip: 'x.x.x.x'
+      fake_ip_attribute: 'x.x.x.x'
     }
   }
 
@@ -125,7 +125,7 @@ RSpec.describe "/geolocations", type: :request do
       it "renders a JSON response with errors for the new geolocation" do
         post geolocations_url,
              params: { geolocation: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:not_found)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
     end

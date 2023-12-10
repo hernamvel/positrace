@@ -16,25 +16,23 @@ class GeolocationsController < ApplicationController
 
   # POST /geolocations
   def create
-    record = Geolocation.find_by(ip: params[:ip])
-    record_to_test = Geolocation.new(ip: params[:ip], hostname: params[:ip])
-    if record
-      render json: { errors: ["Ip has already been taken"] }, status: :unprocessable_entity
-    elsif !record_to_test.valid?
-      # Check for formatting validations before going to service locator
-      errors = record_to_test.errors.map(&:full_message)
-      render json: { errors: errors }, status: :unprocessable_entity
+    if params[:ip].blank?
+      render json: { errors: Array.wrap("invalid parameters") }, status: :not_found
+      return
+    end
+    service = GeolocatorServiceProvider.get_instance
+    success, result_from_call = service.fetch(params[:ip])
+    unless success
+      render json: { errors: Array.wrap(result_from_call[:errors]) }, status: :unprocessable_entity
+      return
+    end
+    @geolocation = Geolocation.find_or_initialize_by(ip: params[:ip])
+    @geolocation.assign_attributes(result_from_call)
+    if @geolocation.save
+      render json: { data: @geolocation }, status: :created, location: @geolocation
     else
-      service = GeolocatorServiceProvider.get_instance
-      record_params = service.fetch(params[:ip])
-      @geolocation = Geolocation.new(record_params)
-
-      if @geolocation.save
-        render json: { data: @geolocation }, status: :created, location: @geolocation
-      else
-        errors = @geolocation.errors.map(&:full_message)
-        render json: { errors: errors }, status: :unprocessable_entity
-      end
+      errors = @geolocation.errors.map(&:full_message)
+      render json: { errors: errors }, status: :unprocessable_entity
     end
   end
 
