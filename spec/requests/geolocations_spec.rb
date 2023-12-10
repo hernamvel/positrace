@@ -9,20 +9,12 @@ RSpec.describe "/geolocations", type: :request do
   let(:valid_attributes) {
     {
       ip: '142.30.1.4',
-      hostname: 'localhost',
-      country_code: 'us',
-      country_name: 'United States',
-      region_code: 'Ohio',
-      city: 'Columbus',
-      latitude: 39,
-      longitude: -82
     }
   }
 
   let(:invalid_attributes) {
     {
-      ip: 'x.x.x.x',
-      hostname: 'localhost',
+      ip: 'x.x.x.x'
     }
   }
 
@@ -101,20 +93,24 @@ RSpec.describe "/geolocations", type: :request do
   end
 
   # TODO: Comming soon when implementing service locator
-  xdescribe "POST /create" do
+  describe "POST /create" do
     context "with valid parameters" do
       it "creates a new Geolocation" do
-        expect {
-          post geolocations_url,
-               params: { geolocation: valid_attributes }, headers: valid_headers, as: :json
-        }.to change(Geolocation, :count).by(1)
+        VCR.use_cassette("ipstack_record") do
+          expect {
+            post geolocations_url,
+                 params: valid_attributes, headers: valid_headers, as: :json
+          }.to change(Geolocation, :count).by(1)
+        end
       end
 
       it "renders a JSON response with the new geolocation" do
-        post geolocations_url,
-             params: { geolocation: valid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including("application/json"))
+        VCR.use_cassette("ipstack_record") do
+          post geolocations_url,
+               params: valid_attributes, headers: valid_headers, as: :json
+          expect(response).to have_http_status(:created)
+          expect(response.content_type).to match(a_string_including("application/json"))
+        end
       end
     end
 

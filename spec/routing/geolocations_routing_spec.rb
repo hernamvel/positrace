@@ -14,7 +14,7 @@ RSpec.describe GeolocationsController, type: :routing do
       expect(get: "/geolocations/search_by").to route_to("geolocations#search_by")
     end
 
-    xit "routes to #create" do
+    it "routes to #create" do
       expect(post: "/geolocations").to route_to("geolocations#create")
     end
 

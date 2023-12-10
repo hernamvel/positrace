@@ -1,0 +1,11 @@
+development:
+  service_provider: IpStack
+  access_key: <%= ENV.fetch("PROVIDER_KEY") { '' } %>
+
+test:
+  service_provider: IpStack
+  access_key: 'dummy_key'
+
+production:
+  service_provider: IpStack
+  access_key: <%= ENV.fetch("PROVIDER_KEY") { '' } %>
