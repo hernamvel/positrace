@@ -14,16 +14,26 @@ class GeolocationsController < ApplicationController
     render json: { data: @geolocation }
   end
 
-  # Coming soon when implementing service locator
   # POST /geolocations
   def create
-    # @geolocation = Geolocation.new
-
-    # if @geolocation.save
-    #   render json: @geolocation, status: :created, location: @geolocation
-    # else
-    #   render json: @geolocation.errors, status: :unprocessable_entity
-    # end
+    if params[:ip].blank?
+      render json: { errors: Array.wrap("invalid parameters") }, status: :not_found
+      return
+    end
+    service = GeolocatorServiceProvider.get_instance
+    success, result_from_call = service.fetch(params[:ip])
+    unless success
+      render json: { errors: Array.wrap(result_from_call[:errors]) }, status: :unprocessable_entity
+      return
+    end
+    @geolocation = Geolocation.find_or_initialize_by(ip: params[:ip])
+    @geolocation.assign_attributes(result_from_call)
+    if @geolocation.save
+      render json: { data: @geolocation }, status: :created, location: @geolocation
+    else
+      errors = @geolocation.errors.map(&:full_message)
+      render json: { errors: errors }, status: :unprocessable_entity
+    end
   end
 
   # GET /geolocations/search_by

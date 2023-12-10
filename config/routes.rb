@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :geolocations, only: [:index, :show] do
+  resources :geolocations, only: [:index, :show, :create] do
     get 'search_by', on: :collection
     delete 'destroy_by', on: :collection
   end
