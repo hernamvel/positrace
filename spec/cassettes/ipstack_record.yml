@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://api.ipstack.com/142.30.1.4?access_key=dummy_key&hostname=1
+    uri: http://api.ipstack.com/142.30.1.4?access_key=dummy_key
     body:
       encoding: US-ASCII
       string: ''
@@ -42,7 +42,7 @@ http_interactions:
       - '0.098'
     body:
       encoding: UTF-8
-      string: '{"ip": "142.30.1.4", "hostname": "142.30.1.4", "type": "ipv4", "continent_code":
+      string: '{"ip": "142.30.1.4", "type": "ipv4", "continent_code":
         "NA", "continent_name": "North America", "country_code": "CA", "country_name":
         "Canada", "region_code": "BC", "region_name": "British Columbia", "city":
         "Victoria", "zip": "V8X 4S8", "latitude": 48.45322036743164, "longitude":

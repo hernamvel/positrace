@@ -13,7 +13,7 @@ describe IpStackServiceProvider do
         success, record = subject.fetch(ip)
         expect(success).to be true
         expect(record[:ip]).to eq('142.30.1.4')
-        [:city, :country_code, :country_name, :hostname, :ip, :latitude, :longitude, :region_code].each do |key|
+        [:city, :country_code, :country_name, :ip, :latitude, :longitude, :region_code].each do |key|
           expect(record[key]).to be_present
         end
       end

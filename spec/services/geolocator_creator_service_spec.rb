@@ -1,0 +1,58 @@
+require 'rails_helper'
+
+describe GeolocatorCreatorService do
+
+  subject { described_class.new(search_key, search_value) }
+
+  context 'with invalid parameters' do
+    let(:search_key) { 'bad_key' }
+    let(:search_value) { '' }
+
+    it 'returns nil' do
+      expect(subject.store).to be_nil
+      expect(subject.errors.first).to eq("invalid parameters")
+    end
+  end
+
+  context 'with an existing record' do
+    let(:search_value) { 'www.positrace.com' }
+    let(:search_key) { 'url' }
+
+    before do
+      geolocation = FactoryBot.create(:geolocation, ip: '172.10.1.1')
+      FactoryBot.create(:url_location, geolocation: geolocation, url: 'www.positrace.com')
+    end
+
+    it 'returns nil' do
+      expect(subject.store).to be_nil
+      expect(subject.errors.first).to eq("record already exists")
+    end
+  end
+
+  context 'with valid parameters and a new ip to create' do
+    let(:search_value) { '142.30.1.4' }
+    let(:search_key) { 'ip' }
+
+    it 'cant be called from this class' do
+      VCR.use_cassette("ipstack_record") do
+        record = subject.store
+        expect(record).to be_persisted
+        expect(record.ip).to eq('142.30.1.4')
+      end
+    end
+  end
+
+  context 'with valid parameters and a new ip to create' do
+    let(:search_value) { 'www.positrace.com' }
+    let(:search_key) { 'url' }
+
+    it 'cant be called from this class' do
+      VCR.use_cassette("ipstack_positrace_record") do
+        record = subject.store
+        expect(record).to be_persisted
+        expect(record.url_locations.first.url).to eq('www.positrace.com')
+      end
+    end
+  end
+
+end

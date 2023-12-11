@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.ipstack.com/www.positrace.com?access_key=dummy_key
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Mon, 11 Dec 2023 04:38:36 GMT
+      X-Apilayer-Transaction-Id:
+      - a085faa2-be8d-4a95-8564-5c7b0aa4c34d
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS
+      Access-Control-Allow-Headers:
+      - "*"
+      X-Quota-Limit:
+      - '1000'
+      X-Quota-Remaining:
+      - '983'
+      X-Increment-Usage:
+      - '1'
+      X-Request-Time:
+      - '0.030'
+    body:
+      encoding: UTF-8
+      string: '{"ip": "35.199.178.49", "type": "ipv4", "continent_code": "NA", "continent_name":
+        "North America", "country_code": "US", "country_name": "United States", "region_code":
+        "OR", "region_name": "Oregon", "city": "The Dalles", "zip": "97058", "latitude":
+        45.551700592041016, "longitude": -121.21900177001953, "location": {"geoname_id":
+        5756304, "capital": "Washington D.C.", "languages": [{"code": "en", "name":
+        "English", "native": "English"}], "country_flag": "https://assets.ipstack.com/flags/us.svg",
+        "country_flag_emoji": "\ud83c\uddfa\ud83c\uddf8", "country_flag_emoji_unicode":
+        "U+1F1FA U+1F1F8", "calling_code": "1", "is_eu": false}}'
+  recorded_at: Mon, 11 Dec 2023 04:38:36 GMT
+recorded_with: VCR 6.2.0
