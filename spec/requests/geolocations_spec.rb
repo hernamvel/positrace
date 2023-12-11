@@ -4,11 +4,13 @@ RSpec.describe "/geolocations", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Geolocation.
 
-  let!(:geolocation) { FactoryBot.create(:geolocation, ip: '172.10.1.1', hostname: 'myurl.com') }
+  let!(:geolocation) { FactoryBot.create(:geolocation, ip: '172.10.1.1') }
+  let!(:url_location) { FactoryBot.create(:url_location, geolocation: geolocation, url: 'www.google.com') }
 
   let(:valid_attributes) {
     {
-      ip: '142.30.1.4',
+      search_key: 'ip',
+      search_value: '142.30.1.4',
     }
   }
 
@@ -52,7 +54,8 @@ RSpec.describe "/geolocations", type: :request do
     context 'with an existing ip' do
       let(:params) do
         {
-          ip: '172.10.1.1'
+          search_value: '172.10.1.1',
+          search_key: 'ip'
         }
       end
 
@@ -63,10 +66,11 @@ RSpec.describe "/geolocations", type: :request do
       end
     end
 
-    context 'with an existing hostname' do
+    context 'with an existing url' do
       let(:params) do
         {
-          hostname: 'myurl.com'
+          search_key: 'url',
+          search_value: 'www.google.com'
         }
       end
 
@@ -80,7 +84,8 @@ RSpec.describe "/geolocations", type: :request do
     context 'with a non existing hostname' do
       let(:params) do
         {
-          hostname: 'yyy.com'
+          search_key: 'url',
+          search_value: 'yyy.com'
         }
       end
 
@@ -92,7 +97,6 @@ RSpec.describe "/geolocations", type: :request do
     end
   end
 
-  # TODO: Comming soon when implementing service locator
   describe "POST /create" do
     context "with valid parameters" do
       it "creates a new Geolocation" do
@@ -125,7 +129,7 @@ RSpec.describe "/geolocations", type: :request do
       it "renders a JSON response with errors for the new geolocation" do
         post geolocations_url,
              params: { geolocation: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
     end
@@ -135,35 +139,39 @@ RSpec.describe "/geolocations", type: :request do
     context 'with an existing ip' do
       let(:params) do
         {
-          ip: '172.10.1.1'
+          search_value: '172.10.1.1',
+          search_key: 'ip'
         }
       end
 
       it "destroys the requested geolocation" do
         expect {
           delete destroy_by_geolocations_url, params: params, headers: valid_headers, as: :json
-        }.to change(Geolocation, :count).by(-1)
+        }.to change(Geolocation, :count).by(-1).and change(UrlLocation, :count).by(-1)
       end
     end
 
-    context 'with an existing hostname' do
+    context 'with an existing url' do
       let(:params) do
         {
-          hostname: 'myurl.com'
+          search_key: 'url',
+          search_value: 'www.google.com'
         }
       end
 
       it "destroys the requested geolocation" do
         expect {
           delete destroy_by_geolocations_url, params: params, headers: valid_headers, as: :json
-        }.to change(Geolocation, :count).by(-1)
+        }.to change(Geolocation, :count).by(-1).and change(UrlLocation, :count).by(-1)
       end
     end
 
     context 'with a non existing hostname' do
       let(:params) do
         {
-          hostname: 'zzz.com'
+          search_key: 'url',
+          search_value: 'ttt.com'
+
         }
       end
 

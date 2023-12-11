@@ -10,10 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_09_102126) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_10_212106) do
   create_table "geolocations", force: :cascade do |t|
     t.string "ip"
-    t.string "hostname"
     t.string "country_code"
     t.string "country_name"
     t.string "region_code"
@@ -22,8 +21,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_09_102126) do
     t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["hostname"], name: "index_geolocations_on_hostname", unique: true
     t.index ["ip"], name: "index_geolocations_on_ip", unique: true
+  end
+
+  create_table "url_locations", force: :cascade do |t|
+    t.string "url"
+    t.integer "geolocation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

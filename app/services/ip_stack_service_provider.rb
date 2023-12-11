@@ -8,7 +8,7 @@ class IpStackServiceProvider < GeolocatorServiceProvider
   end
 
   def fetch(ip_address)
-    response = self.class.get("/#{ip_address}?access_key=#{@access_credentials}&&hostname=1")
+    response = self.class.get("/#{ip_address}?access_key=#{@access_credentials}")
     if response.parsed_response['success'] == false
       [ false,
         {
@@ -19,7 +19,6 @@ class IpStackServiceProvider < GeolocatorServiceProvider
       [ true,
         {
           ip: response.parsed_response['ip'],
-          hostname: response.parsed_response['hostname'],
           country_code: response.parsed_response['country_code'],
           country_name: response.parsed_response['country_name'],
           region_code: response.parsed_response['region_code'],

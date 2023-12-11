@@ -16,23 +16,12 @@ class GeolocationsController < ApplicationController
 
   # POST /geolocations
   def create
-    if params[:ip].blank?
-      render json: { errors: Array.wrap("invalid parameters") }, status: :not_found
-      return
-    end
-    service = GeolocatorServiceProvider.get_instance
-    success, result_from_call = service.fetch(params[:ip])
-    unless success
-      render json: { errors: Array.wrap(result_from_call[:errors]) }, status: :unprocessable_entity
-      return
-    end
-    @geolocation = Geolocation.find_or_initialize_by(ip: params[:ip])
-    @geolocation.assign_attributes(result_from_call)
-    if @geolocation.save
+    service = GeolocatorCreatorService.new(params[:search_key], params[:search_value])
+    @geolocation = service.store
+    if @geolocation.present?
       render json: { data: @geolocation }, status: :created, location: @geolocation
     else
-      errors = @geolocation.errors.map(&:full_message)
-      render json: { errors: errors }, status: :unprocessable_entity
+      render json: { errors: service.errors }, status: :unprocessable_entity
     end
   end
 
@@ -43,7 +32,12 @@ class GeolocationsController < ApplicationController
 
   # DELETE /geolocations/destroy_by
   def destroy_by
-    @geolocation.destroy!
+    ActiveRecord::Base.transaction do
+      @geolocation.url_locations.each do |record|
+        record.destroy!
+      end
+      @geolocation.destroy!
+    end
   end
 
   private
@@ -53,9 +47,7 @@ class GeolocationsController < ApplicationController
     end
 
   def set_geolocation_by
-    search_hash = %i[ ip hostname ].each_with_object({}) do |field, hash|
-      hash[field] = params[field] if params[field].present?
-    end
-    @geolocation = Geolocation.find_by!(search_hash)
+    @geolocation = Geolocation.locate_by(params[:search_key], params[:search_value])
+    raise ActiveRecord::RecordNotFound if @geolocation.nil?
   end
 end
