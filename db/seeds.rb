@@ -8,5 +8,14 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Geolocation.create(ip: '172.1.1.20', hostname: 'hello.com', country_code: 'ca', city: 'Vancouver')
-Geolocation.create(ip: '170.1.1.20', hostname: 'bye.com', country_code: 'ca', city: 'Toronto')
+Geolocation.create(ip: '153.253.1.1', country_code: 'co', city: 'Bogota')
+Geolocation.create(ip: '153.253.1.2', country_code: 'co', city: 'Bogota')
+Geolocation.create(ip: '153.253.1.3', country_code: 'co', city: 'Bogota')
+Geolocation.create(ip: '153.253.1.4', country_code: 'co', city: 'Bogota')
+Geolocation.create(ip: '153.253.1.5', country_code: 'co', city: 'Bogota')
+Geolocation.create(ip: '153.253.1.6', country_code: 'co', city: 'Bogota')
+Geolocation.create(ip: '153.253.1.7', country_code: 'co', city: 'Bogota')
+Geolocation.create(ip: '172.1.1.20', country_code: 'ca', city: 'Vancouver')
+g = Geolocation.create(ip: '35.199.178.49', country_code: 'ca', city: 'Toronto')
+UrlLocation.create(url: 'www.positrace.com', geolocation: g)
+

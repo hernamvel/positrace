@@ -133,6 +133,19 @@ RSpec.describe "/geolocations", type: :request do
         expect(response.content_type).to match(a_string_including("application/json"))
       end
     end
+
+    context 'simulating 3rd party error' do
+      before do
+        allow(IpStackServiceProvider)
+          .to receive(:get).with(anything)
+                .and_raise(Exception)
+      end
+
+      it "renders a JSON response with errors for the new geolocation" do
+        post geolocations_url, params: valid_attributes, headers: valid_headers, as: :json
+        expect(response).to have_http_status(500)
+      end
+    end
   end
 
   describe "DELETE /destroy_by" do
