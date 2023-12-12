@@ -114,6 +114,16 @@ development:
   access_key: <%= ENV.fetch("PROVIDER_KEY") { '' } %>
 ```
 
+## How to review the code?
+
+I suggest to go through the merged PRs and review how I built the project
+incrementally as.
+
+- PR #1 will create basic endpoints with no service locator. Only ip addresses are considered.
+- PR #2 will create the service locator classes, including the `ipstack` service locator.
+- PR #3 will add the concept of URL (model `UrlLocation`) to the endpoints.
+- PR #4 final polishing & more specs to reach 100% coverage (this can be a large PR due to coverage assets inclusion).
+
 ## Database
 
 The project is shipped with `sqlite3` for simplicity. This means
