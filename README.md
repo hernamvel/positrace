@@ -8,7 +8,7 @@ Clone this repository:
 
 `git clone git@github.com:hernamvel/positrace.git`
 
-Build the image (change the build tag if feel you need to do):
+Build the image (change the build tag if you feel you need to do it):
 
 `docker build --tag 'posistrace_rails' .`
 
@@ -41,7 +41,7 @@ seeded data that you can just run copy and pasting in your terminal.
 
 `curl http://localhost:3000/geolocations/1`
 
-Change 1 by the id if you know it.
+Change the number 1 by the id if you know it.
 
 - Search by ip or url
 
@@ -51,7 +51,7 @@ By ip:
 
 By url:
 
-curl --header "Content-Type: application/json"  --request GET  --data '{"search_key":"url","search_value":"www.positrace.com"}' http://localhost:3000/geolocations/search_by
+`curl --header "Content-Type: application/json"  --request GET  --data '{"search_key":"url","search_value":"www.positrace.com"}' http://localhost:3000/geolocations/search_by`
 
 - Create a new record by ip or url
 
@@ -61,7 +61,7 @@ By ip:
 
 By url:
 
-curl --header "Content-Type: application/json"  --request POST  --data '{"search_key":"url","search_value":"www.stackoverflow.com"}' http://localhost:3000/geolocations
+`curl --header "Content-Type: application/json"  --request POST  --data '{"search_key":"url","search_value":"www.stackoverflow.com"}' http://localhost:3000/geolocations`
 
 - Destroy a record by ip or url
 
@@ -73,7 +73,7 @@ By url:
 
 `curl --header "Content-Type: application/json"  --request DELETE  --data '{"search_key":"ip","search_value":"172.1.1.20"}' http://localhost:3000/geolocations/destroy_by`
 
-As you can note, `create`, `search_by` and `destroy_by` actions recieves in the request the following json string:
+As you can note, `create`, `search_by` and `destroy_by` actions receives in the request the following json string:
 
 ```
 {
@@ -82,13 +82,13 @@ As you can note, `create`, `search_by` and `destroy_by` actions recieves in the 
 } 
 ```
 
-In general terms, these will be used to locate the proper resource (gelocation) to be operated.
+In general terms, these will be used to locate the proper resource (geolocation) to be operated.
 You can take a close look at `GeoLocation#locate_by` and at the
 `Database` section of this document below.
 
 ## 3rd party Service Locator
 
-As suggested, I implemented IPStack.com as a service locator to be caled on `create`
+As suggested, I implemented IPStack.com as a service locator to be called on `create`
 endpoint. Exercise asked to be easily configurable, so these are the steps to implement 
 another service locator:
 
@@ -145,11 +145,11 @@ Get the container id with `docker ps` and run
 
 `docker exec -it <your container id>  bash /rails/run_tests.sh`
 
-The projec is fully covered with this stats (given by `simplecov`):
+The project is fully covered with this stats (given by `simplecov`):
 
 100% covered
 2.6 hits/line
-25 files in totol
+25 files in total
 373 lines covered
 
 You'll find unit and integration tests. All 3rd party calls are properly
@@ -163,8 +163,8 @@ Things that I would do with more time:
 - Implementing a 2nd provider
 - Revisit some aspects of the service locator strategy
 - This project can be seen as a cache for geolocation data gathered from 3rd parties.
-In this sense, it should be nice to implemente a refresh_at that will invalidate record
+In this sense, it should be nice to implement a refresh_at that will invalidate record
 to fetch it again.
 
-Any questions?  Don't hesistate: hernamvel@gmail.com
+Any questions?  Don't hesitate to reach me at hernamvel@gmail.com
 
