@@ -6,7 +6,7 @@ Here are the instructions to review and run the geolocation api exercise project
 
 Clone this repository:
 
-`git@github.com:hernamvel/positrace.git`
+`git clone git@github.com:hernamvel/positrace.git`
 
 Build the image (change the build tag if feel you need to do):
 
@@ -88,8 +88,9 @@ You can take a close look at `GeoLocation#locate_by` and at the
 
 ## 3rd party Service Locator
 
-As suggested, I implemented IPStack.com as a service locator. Exercise asked to be
-easily configurable, so these are the steps to implement another service locator:
+As suggested, I implemented IPStack.com as a service locator to be caled on `create`
+endpoint. Exercise asked to be easily configurable, so these are the steps to implement 
+another service locator:
 
 - Create a service class. User the suffix ServiceProvider, and implement the method
 fetch with the logic of that provider:
@@ -103,9 +104,9 @@ end
 ```
 
 Look at `IpStackServiceProvider#fetch` to see how data
-is expected tu be returned
+is expected tu be returned / exceptions to be raised.
 
-- Change `/confg/geolocator.yml` with the new locator im
+- Change `/confg/geolocator.yml` with the new locator in
 the proper environment.  Example:
 
 ```
@@ -114,7 +115,7 @@ development:
   access_key: <%= ENV.fetch("PROVIDER_KEY") { '' } %>
 ```
 
-* Database
+## Database
 
 The project is shipped with `sqlite3` for simplicity. This means
 if you destroy the container, all data will be lost. Some initial
@@ -136,7 +137,34 @@ in one server).
 As already noted, `GeoLocation#locate_by` will deal to locate the correct
 record by ip or url.
 
-* How to run the test suite
+## How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+To run the suite:
+
+Get the container id with `docker ps` and run
+
+`docker exec -it <your container id>  bash /rails/run_tests.sh`
+
+The projec is fully covered with this stats (given by `simplecov`):
+
+100% covered
+2.6 hits/line
+25 files in totol
+373 lines covered
+
+You'll find unit and integration tests. All 3rd party calls are properly
+recorded to be mocked using `vcr` gem.
+
+## Future job
+
+Things that I would do with more time:
+
+- Securing the api
+- Implementing a 2nd provider
+- Revisit some aspects of the service locator strategy
+- This project can be seen as a cache for geolocation data gathered from 3rd parties.
+In this sense, it should be nice to implemente a refresh_at that will invalidate record
+to fetch it again.
+
+Any questions?  Don't hesistate: hernamvel@gmail.com
 
