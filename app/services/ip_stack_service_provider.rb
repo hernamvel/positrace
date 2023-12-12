@@ -28,6 +28,8 @@ class IpStackServiceProvider < GeolocatorServiceProvider
        }
       ]
     end
+  rescue Exception => exception
+    raise Exceptions::GeoLocationError.new(exception.message)
   end
 
 end

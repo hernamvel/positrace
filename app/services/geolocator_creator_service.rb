@@ -21,11 +21,11 @@ class GeolocatorCreatorService
     geolocation = Geolocation.new
     geolocation.assign_attributes(result_from_call)
     geolocation.url_locations.build(url: @search_value) if @search_key == "url"
-    if geolocation.save
-      geolocation
-    else
-      @errors.concat(@geolocation.errors.map(&:full_message))
+    unless geolocation.save
+      @errors.concat(geolocation.errors.map(&:full_message))
+      return
     end
+    geolocation
   end
 
   private

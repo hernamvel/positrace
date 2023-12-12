@@ -29,11 +29,27 @@ describe GeolocatorCreatorService do
     end
   end
 
+  context 'simulating service locator error' do
+    let(:search_value) { '142.30.1.4' }
+    let(:search_key) { 'ip' }
+
+    before do
+      allow_any_instance_of(IpStackServiceProvider)
+        .to receive(:fetch).with("142.30.1.4")
+        .and_return([false, {"errors": ["my error"]}])
+    end
+
+    it 'returns a nil object' do
+      record = subject.store
+      expect(record).to be_nil
+    end
+  end
+
   context 'with valid parameters and a new ip to create' do
     let(:search_value) { '142.30.1.4' }
     let(:search_key) { 'ip' }
 
-    it 'cant be called from this class' do
+    it 'creates a new record' do
       VCR.use_cassette("ipstack_record") do
         record = subject.store
         expect(record).to be_persisted
@@ -42,11 +58,28 @@ describe GeolocatorCreatorService do
     end
   end
 
-  context 'with valid parameters and a new ip to create' do
+  context 'simulating a persistence error' do
+    let(:search_value) { '142.30.1.4' }
+    let(:search_key) { 'ip' }
+
+    before do
+      allow_any_instance_of(Geolocation)
+        .to receive(:save).and_return(false)
+    end
+
+    it 'record is not created' do
+      VCR.use_cassette("ipstack_record") do
+        record = subject.store
+        expect(record).to be_nil
+      end
+    end
+  end
+
+  context 'with valid parameters and a new url to create' do
     let(:search_value) { 'www.positrace.com' }
     let(:search_key) { 'url' }
 
-    it 'cant be called from this class' do
+    it 'creates a new record' do
       VCR.use_cassette("ipstack_positrace_record") do
         record = subject.store
         expect(record).to be_persisted
@@ -54,5 +87,4 @@ describe GeolocatorCreatorService do
       end
     end
   end
-
 end
