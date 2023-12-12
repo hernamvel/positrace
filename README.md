@@ -27,7 +27,6 @@ don't have to deal with secret keys, etc. Feel free to change the
 the `ENV RAILS_ENV` to production in the `Dockerfile` if you need to
 do so.
 
-
 ## Geolocation endpoints
 
 For your reference, I'm providing working curl commands against already
@@ -153,7 +152,8 @@ The project is fully covered with this stats (given by `simplecov`):
 373 lines covered
 
 You'll find unit and integration tests. All 3rd party calls are properly
-recorded to be mocked using `vcr` gem.
+recorded to be mocked using `vcr` gem. For you reference, I'm checking in
+the repository the coverage report in the folder /coverage
 
 ## Future job
 
@@ -163,7 +163,7 @@ Things that I would do with more time:
 - Implementing a 2nd provider
 - Revisit some aspects of the service locator strategy
 - This project can be seen as a cache for geolocation data gathered from 3rd parties.
-In this sense, it should be nice to implement a refresh_at that will invalidate record
+In this sense, it should be nice to implement a `refresh_at` that will invalidate record
 to fetch it again.
 
 Any questions?  Don't hesitate to reach me at hernamvel@gmail.com
